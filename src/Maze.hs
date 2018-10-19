@@ -59,6 +59,4 @@ generate_ maze node (r:rs) stack run    |  isEmpty stack && run /= 0 = maze
 generate w h rs = generate_ (blank w h) (Node True (Pos 1 1) []) rs empty 0
 
 
------------------
-
 blank w h = Maze w h $ matrix w h $ \(i,j) -> Node False (Pos i j) []
