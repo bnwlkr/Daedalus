@@ -53,7 +53,7 @@ generate_ maze node (r:rs) stack run    |  isEmpty stack && run /= 0 = maze
                                     |  otherwise = generate_ newMaze (fromJust next) rs (push stack nodeNewChild) (run+1)
 
                 where next   | length adjacents == 0 = Nothing
-                             | otherwise = (trace (show (head (filter (\x -> x < (length adjacents)) (r:rs))))) $ Just (adjacents !! 0)
+                             | otherwise = (trace (show (head (filter (\x -> x < (length adjacents)) (r:rs))))) $ Just (adjacents !! (mod r (length adjacents)))
                       adjacents = (trace (show (chart maze))) $ filter (not . visited) (adjacent maze node)
                       nodeNewChild = (Node True (pos node) $ (fromJust next):children node)
                       newMaze = (Maze (width maze) (height maze) (setElem (Node True (pos node) (children node)) (x $ pos node, y $ pos node) (chart maze)))
