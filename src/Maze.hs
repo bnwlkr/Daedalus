@@ -20,11 +20,7 @@ data Node = Node {
         pos :: Position,
         children :: [Node]
     }
-    deriving (Eq)
-
-instance Show Node where
-    show n  | visited n = "+"
-            | otherwise = "_"
+    deriving (Eq, Show)
 
 
 data Position = Pos {
@@ -49,14 +45,16 @@ inMaze :: Maze -> Position -> Bool
 inMaze maze pos = pos >= (Pos 1 1) && pos <= (Pos (width maze) (height maze))
 
 generate_ maze node (r:rs) stack run    |  isEmpty stack && run /= 0 = maze
-                                    |  next == Nothing =  generate_ newMaze (peek stack) rs (pop stack) (run+1)
-                                    |  otherwise = generate_ newMaze (fromJust next) rs (push stack nodeWithChild) (run+1)
+                                        |  next == Nothing =  generate_ newMaze (peek stack) rs (pop stack) (run+1)
+                                        |  otherwise = generate_ newMaze (fromJust next) rs (push stack newN) (run+1)
 
                 where next   | length adjacents == 0 = Nothing
-                             | otherwise = (trace (show (head (filter (\x -> x < (length adjacents)) (r:rs))))) $ Just (adjacents !! (mod r (length adjacents)))
-                      adjacents = (trace (show (chart maze))) $ filter (not . visited) (adjacent maze node)
-                      nodeWithChild = (Node True (pos node) $ (fromJust next):children node)
-                      newMaze = (Maze (width maze) (height maze) (setElem nodeWithChild (x $ pos node, y $ pos node) (chart maze)))
+                             | otherwise = Just (adjacents !! (mod r (length adjacents)))
+                      adjacents = filter (not . visited) (adjacent maze node)
+                      newN = (case next of
+                                Just n -> (Node True (pos node) $ n:children node)
+                                Nothing -> (Node True (pos node) $ children node))
+                      newMaze = (Maze (width maze) (height maze) (setElem newN (x $ pos node, y $ pos node) (chart maze)))
 
 generate w h rs = generate_ (blank w h) (Node True (Pos 1 1) []) rs empty 0
 

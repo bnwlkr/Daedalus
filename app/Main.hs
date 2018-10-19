@@ -8,7 +8,7 @@ import Stack
 
 main = do
     seed  <- getStdGen
-    let rs =  (randomRs (0,3) seed :: [Int])
-    let maze = generate  4 4 rs
-    view 
-    return maze
+    let rs =  (randomRs (0,2) seed :: [Int])
+    let maze = generate 100 100  rs
+    view maze
+    print "done"

@@ -24,7 +24,7 @@ dependencies:
 - matrix
 - random
 - JuicyPixels
-
+- vector
 library:
   source-dirs: src
 
