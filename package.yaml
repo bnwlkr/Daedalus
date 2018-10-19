@@ -23,7 +23,7 @@ dependencies:
 - base >= 4.7 && < 5
 - matrix
 - random
-
+- JuicyPixels
 
 library:
   source-dirs: src
