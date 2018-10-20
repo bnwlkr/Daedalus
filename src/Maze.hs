@@ -20,7 +20,11 @@ data Node = Node {
         pos :: Position,
         children :: [Node]
     }
-    deriving (Eq, Show)
+    deriving (Eq)
+
+instance Show Node where
+    show n = show ((x $ pos n, y $ pos n), visited n, children n)
+
 
 
 data Position = Pos {

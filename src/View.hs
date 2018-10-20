@@ -8,14 +8,14 @@ import Debug.Trace
 import Maze
 
 
-data Space = P | W
+data Space = P | W | S
     deriving (Show, Eq)
 
 carve :: Maze -> Matrix Space
 carve (Maze width height chart) = chisel 1 1 chart stone
     where stone = matrix (2*width+1) (2*height+1) $ \(i,j) -> if onNode (i,j) width height then P else W
 
-onNode p w h = mod (fst p) 2 == 0 && mod (snd p) 2 == 0 && (fst p) >= 2 && (snd p) >= 2 && (fst p) <= w*2 && (snd p) <= h*2
+onNode (i,j) w h = (mod (i) 2 == 0 && mod (j) 2 == 0 && (i) >= 2 && (j) >= 2 && (i) <= w*2 && (j) <= h*2) || (i,j) == (1,2) || (i,j) == (2*w+1,2*h)
 
 chisel :: Int -> Int -> Matrix Node -> Matrix Space -> Matrix Space
 chisel i j mnode msquare    | i == (nrows mnode) && j == (ncols mnode) = msquare
@@ -36,12 +36,17 @@ chiselOne node msquare  | children node == [] = msquare
                         (c:cs) = children node
                         rep = (Node True (pos node) cs)
 
-view maze =
-        do
-            writePng "maze.png" $ imageCreator (carve maze)
 
+cut spacem sol = mapPos (\(i,j) s -> if (mod i 2 == 0) && (mod j 2 == 0) then (if sol  ! (quot i 2, quot j 2) == 1 then S else s) else s) spacem
+
+view maze solution time =
+        do
+            writePng ("maze" ++ (show time) ++ ".png") $ imageCreator (carve maze)
+            writePng ("sol" ++ (show time) ++ ".png") $ imageCreator  (cut (carve maze) solution)
 
 
 imageCreator spaceMatrix = generateImage pixelRenderer ((nrows spaceMatrix)*2) ((ncols spaceMatrix)*2)
    where pixelRenderer x y  | spaceMatrix ! ((quot x 2)+1, (quot y 2)+1) == P = PixelRGB8 255 255 255
+                            | spaceMatrix ! ((quot x 2)+1, (quot y 2)+1) == S = PixelRGB8 255 0 0
                             | otherwise = PixelRGB8 0 0 0
+

@@ -24,6 +24,7 @@ dependencies:
 - matrix
 - random
 - JuicyPixels
+- time
 library:
   source-dirs: src
 
