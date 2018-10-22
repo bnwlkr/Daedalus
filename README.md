@@ -1,4 +1,4 @@
-# Daedalus
+# Daedalus 🌽
 
 usage: `./Daedalus width height`
 
