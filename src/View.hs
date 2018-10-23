@@ -39,10 +39,11 @@ chiselOne node msquare  | children node == [] = msquare
 
 cut spacem sol = mapPos (\(i,j) s -> if (mod i 2 == 0) && (mod j 2 == 0) then (if sol  ! (quot i 2, quot j 2) == 1 then S else s) else s) spacem
 
-view maze solution time =
+view maze solution time display_solve =
         do
             writePng ("maze" ++ (show time) ++ ".png") $ imageCreator (carve maze)
-            writePng ("sol" ++ (show time) ++ ".png") $ imageCreator  (cut (carve maze) solution)
+
+            if display_solve == 1 then writePng ("sol" ++ (show time) ++ ".png") $ imageCreator  (cut (carve maze) solution) else return ()
 
 
 imageCreator spaceMatrix = generateImage pixelRenderer ((nrows spaceMatrix)*2) ((ncols spaceMatrix)*2)

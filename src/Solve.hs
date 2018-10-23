@@ -8,7 +8,7 @@ import Stack
 
 
 
-
+solve :: Maze -> [Int] -> Matrix Int
 solve maze rs = solve_ unvisited mx start rs empty 0
         where   start = mlookup maze (Pos 1 1)
                 unvisited = (Maze (width maze) (height maze) newChart)

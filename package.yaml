@@ -25,6 +25,7 @@ dependencies:
 - random
 - JuicyPixels
 - time
+- argparser
 library:
   source-dirs: src
 
